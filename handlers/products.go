@@ -87,7 +87,7 @@ func (p *Products) updateProduct(id int, w http.ResponseWriter, h *http.Request)
 	prod := &data.Product{}
 	err := prod.FromJSON(h.Body)
 	if err != nil {
-		http.Error(w, "Unable to unmarshal hson", http.StatusBadRequest)
+		http.Error(w, "Unable to unmarshal json", http.StatusBadRequest)
 	}
 
 	err = data.UpdateProduct(id, prod)
