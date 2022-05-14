@@ -1,0 +1,70 @@
+basePath: /
+consumes:
+- application/json
+definitions:
+  Product:
+    properties:
+      description:
+        type: string
+        x-go-name: Description
+      id:
+        format: int64
+        type: integer
+        x-go-name: ID
+      name:
+        type: string
+        x-go-name: Name
+      price:
+        format: float
+        type: number
+        x-go-name: Price
+      sku:
+        type: string
+        x-go-name: SKU
+    type: object
+    x-go-package: github.com/badasukerubin/go-microservices/data
+info:
+  description: Documentation for Product API
+  title: Product API
+  version: 1.0.0
+paths:
+  /products:
+    get:
+      description: Returns a list of products
+      operationId: listProducts
+      responses:
+        "200":
+          $ref: '#/responses/productsResponse'
+      tags:
+      - products
+  /products/{id}:
+    put:
+      description: Returns a list of products
+      operationId: updateProduct
+      parameters:
+      - description: The ID of the product to update
+        format: int64
+        in: path
+        name: id
+        required: true
+        type: integer
+        x-go-name: ID
+      responses:
+        "200":
+          $ref: '#/responses/noContent'
+      tags:
+      - products
+produces:
+- application/json
+responses:
+  noContent:
+    description: ""
+  productsResponse:
+    description: A list of products to return in the response
+    schema:
+      items:
+        $ref: '#/definitions/Product'
+      type: array
+schemes:
+- http
+swagger: "2.0"
