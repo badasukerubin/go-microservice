@@ -49,6 +49,14 @@ paths:
     delete:
       description: Delete a product
       operationId: deleteProduct
+      parameters:
+      - description: The ID of the product to update
+        format: int64
+        in: path
+        name: id
+        required: true
+        type: integer
+        x-go-name: ID
       responses:
         "200":
           $ref: '#/responses/noContent'
