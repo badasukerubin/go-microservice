@@ -37,9 +37,25 @@ paths:
           $ref: '#/responses/productsResponse'
       tags:
       - products
+    post:
+      description: Adds a product
+      operationId: addProduct
+      responses:
+        "200":
+          $ref: '#/responses/noContent'
+      tags:
+      - products
   /products/{id}:
+    delete:
+      description: Delete a product
+      operationId: deleteProduct
+      responses:
+        "200":
+          $ref: '#/responses/noContent'
+      tags:
+      - products
     put:
-      description: Returns a list of products
+      description: Updates a product
       operationId: updateProduct
       parameters:
       - description: The ID of the product to update
@@ -58,7 +74,7 @@ produces:
 - application/json
 responses:
   noContent:
-    description: ""
+    description: No content to return in the response
   productsResponse:
     description: A list of products to return in the response
     schema:

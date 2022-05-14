@@ -39,6 +39,7 @@ type productIDParameterWrapper struct {
 	ID int `json:"id"`
 }
 
+// No content to return in the response
 // swagger:response noContent
 type productNoContentWrapper struct {
 }
