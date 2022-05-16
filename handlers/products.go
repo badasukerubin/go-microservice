@@ -31,7 +31,7 @@ type productsResponseWrapper struct {
 	Body []data.Product
 }
 
-// swagger:parameters updateProduct
+// swagger:parameters updateProduct deleteProduct
 type productIDParameterWrapper struct {
 	// The ID of the product to update
 	// in: path
