@@ -12,25 +12,33 @@ import (
 	gohandlers "github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 
+	"github.com/badasukerubin/go-microservices/files"
 	"github.com/badasukerubin/go-microservices/handlers"
 )
 
 func main() {
 	l := log.New(os.Stdout, "microservice", log.LstdFlags)
+	stor, err := files.NewLocal("./imagestore", 1024*1000*5)
+
+	if err != nil {
+		l.Fatal("Unable to create storage", err)
+		os.Exit(1)
+	}
 
 	ph := handlers.NewProducts(l)
+	fh := handlers.NewFiles(stor, l)
 
 	sm := mux.NewRouter()
 
 	getRouter := sm.Methods("GET").Subrouter()
-	getRouter.HandleFunc("/", ph.GetProducts)
+	getRouter.HandleFunc("/products", ph.GetProducts)
 
 	putRouter := sm.Methods("PUT").Subrouter()
-	putRouter.HandleFunc("/{id:[0-9]+}", ph.UpdateProduct)
+	putRouter.HandleFunc("/products/{id:[0-9]+}", ph.UpdateProduct)
 	putRouter.Use(ph.MiddlewareProductValidation)
 
 	postRouter := sm.Methods("POST").Subrouter()
-	postRouter.HandleFunc("/", ph.AddProduct)
+	postRouter.HandleFunc("/products", ph.AddProduct)
 	postRouter.Use(ph.MiddlewareProductValidation)
 
 	ops := middleware.RedocOpts{SpecURL: "swagger.yaml"}
@@ -40,6 +48,9 @@ func main() {
 
 	// CORS
 	ch := gohandlers.CORS(gohandlers.AllowedOrigins([]string{"http://localhost:3000"}))
+
+	pfh := sm.Methods(http.MethodPost).Subrouter()
+	pfh.HandleFunc("/products/file", fh.UploadMultipart)
 
 	s := &http.Server{
 		Addr:         ":9090",
