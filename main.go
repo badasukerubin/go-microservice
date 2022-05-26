@@ -27,6 +27,7 @@ func main() {
 
 	ph := handlers.NewProducts(l)
 	fh := handlers.NewFiles(stor, l)
+	mw := handlers.GzipHandler{}
 
 	sm := mux.NewRouter()
 
@@ -46,11 +47,13 @@ func main() {
 	getRouter.Handle("/docs", sh)
 	getRouter.Handle("/swagger.yaml", http.FileServer(http.Dir("./")))
 
-	// CORS
-	ch := gohandlers.CORS(gohandlers.AllowedOrigins([]string{"http://localhost:3000"}))
-
 	pfh := sm.Methods(http.MethodPost).Subrouter()
 	pfh.HandleFunc("/products/file", fh.UploadMultipart)
+
+	pfh.Use(mw.GZipMiddleware)
+
+	// CORS
+	ch := gohandlers.CORS(gohandlers.AllowedOrigins([]string{"http://localhost:3000"}))
 
 	s := &http.Server{
 		Addr:         ":9090",
