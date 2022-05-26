@@ -18,7 +18,7 @@ import (
 
 func main() {
 	l := log.New(os.Stdout, "microservice", log.LstdFlags)
-	stor, err := files.NewLocal("", 1024*1000*5)
+	stor, err := files.NewLocal("./imagestore", 1024*1000*5)
 
 	if err != nil {
 		l.Fatal("Unable to create storage", err)
