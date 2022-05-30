@@ -3,26 +3,32 @@ consumes:
 - application/json
 definitions:
   Product:
+    description: Product product
     properties:
       description:
+        description: description
         type: string
         x-go-name: Description
       id:
+        description: ID
         format: int64
         type: integer
         x-go-name: ID
       name:
+        description: name
         type: string
         x-go-name: Name
       price:
+        description: price
         format: float
         type: number
         x-go-name: Price
       sku:
+        description: s k u
         type: string
         x-go-name: SKU
     type: object
-    x-go-package: github.com/badasukerubin/go-microservices/data
+    x-go-package: github.com/badasukerubin/go-microservices/models
 info:
   description: Documentation for Product API
   title: Product API

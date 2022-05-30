@@ -1,5 +1,5 @@
+make --dry-run --always-make --keep-going --print-directory
 make: Entering directory `/Users/badasukerubin/code/go/go-microservice'
+GO111MODULE=on swagger generate spec -o ./swagger.yaml --scan-models
 make: Leaving directory `/Users/badasukerubin/code/go/go-microservice'
  
-make: *** No targets.  Stop.
-
