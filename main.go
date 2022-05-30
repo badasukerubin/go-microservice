@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"log"
+	"net"
 	"net/http"
 	"os"
 	"os/signal"
@@ -11,9 +12,13 @@ import (
 	"github.com/go-openapi/runtime/middleware"
 	gohandlers "github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 
 	"github.com/badasukerubin/go-microservices/files"
 	"github.com/badasukerubin/go-microservices/handlers"
+	protos "github.com/badasukerubin/go-microservices/protos/product"
+	server "github.com/badasukerubin/go-microservices/server"
 )
 
 func main() {
@@ -62,6 +67,21 @@ func main() {
 		ReadTimeout:  1 * time.Second,
 		WriteTimeout: 1 * time.Second,
 	}
+
+	gs := grpc.NewServer()
+	ps := server.NewProduct(*l)
+
+	protos.RegisterProductServer(gs, ps)
+
+	// Disable in prod
+	reflection.Register(gs)
+
+	ln, err := net.Listen("tcp", ":9092")
+	if err != nil {
+		l.Fatal("Unable to listen", err)
+	}
+
+	gs.Serve(ln)
 
 	go func() {
 		err := s.ListenAndServe()
